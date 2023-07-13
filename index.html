@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to the Fetch Dog Database</title>
+  <script>
+    // Function to handle form submission
+    function submitForm(event) {
+      event.preventDefault(); // Prevent form from submitting
+
+      // Get form input values
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+
+      // Create an object with the form data
+      var formData = {
+        name: name,
+        email: email
+      };
+
+      // Send form data to the login endpoint using Fetch API
+      fetch('login-endpoint', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Check if authentication is successful
+        if (data.authenticated) {
+          // Store authentication token in local storage
+          localStorage.setItem('authToken', data.token);
+          alert('Authentication successful! Token stored in local storage.');
+        } else {
+          alert('Authentication failed!');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</head>
+<body>
+  <h2>User Login</h2>
+  <form onsubmit="submitForm(event)">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>

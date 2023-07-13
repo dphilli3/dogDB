@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dog Search</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .favorite-checkbox {
+      transform: scale(1.5);
+    }
+
+    .favorite-checkbox:checked {
+      color: orange;
+    }
+
+    .pagination {
+      display: inline-block;
+    }
+
+    .pagination a {
+      color: black;
+      float: left;
+      padding: 8px 16px;
+      text-decoration: none;
+      border: 1px solid #ddd;
+    }
+
+    .pagination a.active {
+      background-color: #4CAF50;
+      color: white;
+      border: 1px solid #4CAF50;
+    }
+
+    .pagination a:hover:not(.active) {
+      background-color: #ddd;
+    }
+  </style>
+  <script>
+    // Mocked data for demonstration purposes
+    var dogs = [
+      { breed: 'Labrador Retriever', age: '3 years', size: 'Large' },
+      { breed: 'German Shepherd', age: '2 years', size: 'Large' },
+      { breed: 'Beagle', age: '4 years', size: 'Small' },
+      { breed: 'Bulldog', age: '5 years', size: 'Medium' },
+      { breed: 'Golden Retriever', age: '2 years', size: 'Large' },
+      { breed: 'Poodle', age: '1 year', size: 'Medium' },
+      { breed: 'Boxer', age: '3 years', size: 'Large' },
+      { breed: 'Chihuahua', age: '2 years', size: 'Small' },
+      { breed: 'Dalmatian', age: '4 years', size: 'Medium' },
+      { breed: 'Rottweiler', age: '3 years', size: 'Large' },
+      { breed: 'Husky', age: '2 years', size: 'Large' },
+      { breed: 'Shih Tzu', age: '1 year', size: 'Small' },
+      { breed: 'Bull Terrier', age: '3 years', size: 'Medium' },
+      { breed: 'Yorkshire Terrier', age: '2 years', size: 'Small' }
+    ];
+
+    // Variables to track state
+    var currentPage = 1;
+    var pageSize = 5;
+    var selectedBreed = '';
+
+    // Function to filter dogs based on breed
+    function filterDogsByBreed(breed) {
+      selectedBreed = breed;
+      displayDogs();
+    }
+
+    // Function to sort dogs by breed
+    function sortDogsByBreed(order) {
+      dogs.sort(function(a, b) {
+        if (order === 'asc') {
+          return a.breed.localeCompare(b.breed);
+        } else {
+          return b.breed.localeCompare(a.breed);
+        }
+      });
+      displayDogs();
+    }
+
+    // Function to display dogs based on pagination and filters
+    function displayDogs() {
+      var filteredDogs = dogs.filter(function(dog) {
+        if (selectedBreed !== '') {
+          return dog.breed === selectedBreed;
+        }
+        return true;
+      });
+
+      var totalPages = Math.ceil(filteredDogs.length / pageSize);
+
+      if (currentPage > totalPages) {
+        currentPage = totalPages;
+      }
+
+      var startIndex = (currentPage - 1) * pageSize;
+      var endIndex = startIndex + pageSize;
+      var paginatedDogs = filteredDogs.slice(startIndex, endIndex);
+
+      var tableBody = document.getElementById('dogTableBody');
+      tableBody.innerHTML = ' https://frontend-take-home-service.fetch.com';
+
+      for (var i = 0; i < paginatedDogs.length; i++) {
+        var dog = paginatedDogs[i];
+
+        var row = document.createElement('tr');
+
+        var breedCell = document.createElement('td');
+        breedCell.textContent = dog.breed;
+        row.appendChild(breedCell);
+
+        var ageCell = document.createElement('td');
+        ageCell.textContent = dog.age;
+        row.appendChild(ageCell);
+
+        var sizeCell = document.createElement('td');
+        sizeCell.textContent = dog.size;
+        row.appendChild(sizeCell);
+
+        var favoriteCell = document.createElement('td');
+        var favoriteCheckbox = document.createElement('input');
+        favoriteCheckbox.type = 'checkbox';
+        favoriteCheckbox.className = 'favorite-checkbox';
+        favoriteCell.appendChild(favoriteCheckbox);
+        row.appendChild(favoriteCell);
+
+        tableBody.appendChild(row);
+      }
+
+      updatePagination(totalPages);
+    }
+
+    // Function to update the pagination UI
+    function updatePagination(totalPages) {
+      var paginationContainer = document.getElementById('paginationContainer');
+      paginationContainer.innerHTML = ' https://frontend-take-home-service.fetch.com';
+
+      for (var i = 1; i <= totalPages; i++) {
+        var link = document.createElement('a');
+        link.href = '#';
+        link.textContent = i;
+        if (i === currentPage) {
+          link.className = 'active';
+        } else {
+          link.onclick = (function(page) {
+            return function() {
+              currentPage = page;
+              displayDogs();
+            };
+          })(i);
+        }
+        paginationContainer.appendChild(link);
+      }
+    }
+
+    // Initial display of dogs
+    displayDogs();
+  </script>
+</head>
+<body>
+  <h2>Dog Search</h2>
+  <label for="breedFilter">Filter by Breed:</label>
+  <select id="breedFilter" onchange="filterDogsByBreed(this.value)">
+    <option value="">All Breeds</option>
+    <option value="Labrador Retriever">Labrador Retriever</option>
+    <option value="German Shepherd">German Shepherd</option>
+    <option value="Beagle">Beagle</option>
+    <option value="Bulldog">Bulldog</option>
+    <option value="Golden Retriever">Golden Retriever</option>
+    <option value="Poodle">Poodle</option>
+    <option value="Boxer">Boxer</option>
+    <option value="Chihuahua">Chihuahua</option>
+    <option value="Dalmatian">Dalmatian</option>
+    <option value="Rottweiler">Rottweiler</option>
+    <option value="Husky">Husky</option>
+    <option value="Shih Tzu">Shih Tzu</option>
+    <option value="Bull Terrier">Bull Terrier</option>
+    <option value="Yorkshire Terrier">Yorkshire Terrier</option>
+  </select>
+  <br><br>
+  <label for="sortOrder">Sort by Breed:</label>
+  <select id="sortOrder" onchange="sortDogsByBreed(this.value)">
+    <option value="asc">Ascending</option>
+    <option value="desc">Descending</option>
+  </select>
+  <br><br>
+  <table
